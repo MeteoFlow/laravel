@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": "^7.1|^8.0",
-        "meteoflow/php": "^1.0",
+        "meteoflow/php": "^1.1",
         "illuminate/support": "^5.5|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0"
     },
     "require-dev": {
@@ -39,6 +39,9 @@
                 "MeteoFlow": "MeteoFlow\\Laravel\\Facades\\MeteoFlow"
             }
         }
+    },
+    "scripts": {
+        "test": "phpunit"
     },
     "config": {
         "sort-packages": true
