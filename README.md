@@ -90,6 +90,8 @@ class WeatherController extends Controller
 
 ### Available Methods
 
+#### Weather
+
 ```php
 // Current weather
 MeteoFlow::current(Location $location): CurrentWeatherResponse
@@ -104,17 +106,65 @@ MeteoFlow::forecast3Hourly(Location $location, ?ForecastOptions $options = null)
 MeteoFlow::forecastDaily(Location $location, ?ForecastOptions $options = null): DailyForecastResponse
 ```
 
+#### Geography
+
+```php
+// List all supported countries
+MeteoFlow::countries(): CountriesResponse
+
+// List cities for a country code
+MeteoFlow::citiesByCountry(string $countryCode): CitiesResponse
+
+// Search cities by name (limit is optional)
+MeteoFlow::searchCities(string $query, ?int $limit = null): CitiesResponse
+```
+
+### Geography
+
+```php
+use MeteoFlow\Laravel\Facades\MeteoFlow;
+
+// List all countries
+$response = MeteoFlow::countries();
+
+foreach ($response->countries as $country) {
+    $country->slug;  // e.g. "united-kingdom"
+    $country->name;  // e.g. "United Kingdom"
+    $country->code;  // ISO 3166-1 alpha-2, e.g. "GB"
+}
+
+// Cities by country code
+$response = MeteoFlow::citiesByCountry('DE');
+
+foreach ($response->cities as $city) {
+    $city->slug;           // e.g. "germany-berlin"
+    $city->name;           // City name
+    $city->country;        // Country name
+    $city->countryCode;    // Country code
+    $city->region;         // Region / state name
+    $city->lat;            // Latitude
+    $city->lon;            // Longitude
+    $city->timezoneOffset; // UTC offset in minutes
+}
+
+// Search cities by name
+$response = MeteoFlow::searchCities('Berlin', 5);
+
+foreach ($response->cities as $city) {
+    // Same fields as above
+}
+```
+
 ### Forecast Options
 
 ```php
 use MeteoFlow\Options\ForecastOptions;
-use MeteoFlow\Options\Units;
+use MeteoFlow\Options\Unit;
 
-$options = new ForecastOptions();
-$options = $options
-    ->withDays(14)
-    ->withUnits(Units::IMPERIAL)
-    ->withLang('de');
+$options = ForecastOptions::create()
+    ->setDays(14)
+    ->setUnit(Unit::IMPERIAL)
+    ->setLang('de');
 
 $forecast = MeteoFlow::forecastDaily($location, $options);
 ```

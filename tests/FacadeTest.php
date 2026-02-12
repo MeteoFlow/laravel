@@ -23,4 +23,14 @@ class FacadeTest extends TestCase
 
         $this->assertEquals('test-api-key', $client->getConfig()->getApiKey());
     }
+
+    #[Test]
+    public function facade_exposes_geography_methods(): void
+    {
+        $client = MeteoFlow::getFacadeRoot();
+
+        $this->assertTrue(method_exists($client, 'countries'));
+        $this->assertTrue(method_exists($client, 'citiesByCountry'));
+        $this->assertTrue(method_exists($client, 'searchCities'));
+    }
 }
