@@ -47,6 +47,7 @@ METEOFLOW_API_KEY=your-api-key-here
 use MeteoFlow\Laravel\Facades\MeteoFlow;
 use MeteoFlow\Location\LocationSlug;
 use MeteoFlow\Location\LocationCoords;
+use MeteoFlow\Location\Location;
 
 // Get current weather by location slug
 $location = new LocationSlug('london-gb');
@@ -57,6 +58,10 @@ echo $weather->getWeather()->getDescription(); // "Partly cloudy"
 
 // Get current weather by coordinates
 $location = new LocationCoords(51.5074, -0.1278);
+$weather = MeteoFlow::current($location);
+
+// Get current weather by IP
+$location = Location::fromIp('8.8.8.8');
 $weather = MeteoFlow::current($location);
 
 // Get daily forecast
@@ -104,6 +109,12 @@ MeteoFlow::forecast3Hourly(Location $location, ?ForecastOptions $options = null)
 
 // Daily forecast
 MeteoFlow::forecastDaily(Location $location, ?ForecastOptions $options = null): DailyForecastResponse
+
+// Geomagnetic activity
+MeteoFlow::geomagnetic(Location $location): GeomagneticResponse
+
+// Air quality by days
+MeteoFlow::airQuality(Location $location, ?AirQualityOptions $options = null): AirQualityResponse
 ```
 
 #### Geography
@@ -167,6 +178,28 @@ $options = ForecastOptions::create()
     ->setLang('de');
 
 $forecast = MeteoFlow::forecastDaily($location, $options);
+```
+
+### Air Quality Options
+
+```php
+use MeteoFlow\Options\AirQualityOptions;
+use MeteoFlow\Options\Unit;
+
+$options = AirQualityOptions::create()
+    ->setDays(5)
+    ->setUnit(Unit::METRIC);
+
+$airQuality = MeteoFlow::airQuality($location, $options);
+```
+
+### Geomagnetic Activity
+
+```php
+use MeteoFlow\Location\Location;
+
+$location = Location::fromSlug('united-kingdom-london');
+$geomagnetic = MeteoFlow::geomagnetic($location);
 ```
 
 ## Testing
