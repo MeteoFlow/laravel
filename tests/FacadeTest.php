@@ -33,4 +33,13 @@ class FacadeTest extends TestCase
         $this->assertTrue(method_exists($client, 'citiesByCountry'));
         $this->assertTrue(method_exists($client, 'searchCities'));
     }
+
+    #[Test]
+    public function facade_exposes_new_forecast_methods(): void
+    {
+        $client = MeteoFlow::getFacadeRoot();
+
+        $this->assertTrue(method_exists($client, 'geomagnetic'));
+        $this->assertTrue(method_exists($client, 'airQuality'));
+    }
 }
